@@ -173,7 +173,7 @@ What this code is doing is first getting the **pts** in the bird's eye view, fil
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./test_videous_output/project_video.mp4)
+Here's a [link to my video result](./test_videos_output/project_video.mp4)
 
 
 Or a Gif Here
