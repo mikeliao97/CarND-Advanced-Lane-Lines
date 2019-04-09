@@ -34,6 +34,8 @@ The goals / steps of this project are the following:
 [dynamic_trans1]: ./output_images/transform_array.png "dtrans1"
 [poly1]: ./output_images/threshed1.png "poly1"
 [curvature_formula]: ./output_images/curvature_formula.png "curvature_formula"
+[warped_back1]: ./output_images/warp_back1.png "warpedback"
+
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
@@ -107,6 +109,7 @@ I also tried another way where I found Hough Lines for the src points. As you ca
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
 After I perspective transformed into the "Bird Eye View", I identified the lane-line pixels to fit the polynomial.
+
 ![alt text][poly1]
 
 In my code, this is under "Pipeline.ipynb" section #4, in functions **fit_poly**, **find_lane_pixels**, **search_around_poly_with_curvature**, and **fit_polynomial_with_curvature**. In essence, 
@@ -123,6 +126,7 @@ The code for ROC is also in "Pipeline.ipynb" section #4, in functions **search_a
 To calculate the curvature, we use the fromula
 
 ![alt text][curvature_formula]
+
 We apply this formula but have to translate the value from pixels to meters in the real world. 
 ```python
  ym_per_pix = 30/img_shape[1] # meters per pixel in y dimension
@@ -148,8 +152,20 @@ offset = np.abs(laneCenter - cameraCenter) * xm_per_pix
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+I implemented this reverse warping using the following python code that involves using the matrix **Minv** which warps points from **dst** to **src**. This **Minv** matrix is the inverse of the **M** matrix that is used to warp points from **src** to **dst**, which was used to create the bird's eye view. 
 
+```python
+pts_left = np.array([np.transpose(np.vstack([left_fitx, ploty]))])
+pts_right = np.array([np.flipud(np.transpose(np.vstack([right_fitx, ploty])))])
+pts = np.hstack((pts_left, pts_right))
+# Draw the lane onto the warped blank image
+cv2.fillPoly(color_warp, np.array([pts], 'int32'), (0,255, 0))
+# Warp the blank back to original image space using inverse perspective matrix (Minv)
+newwarp = cv2.warpPerspective(color_warp, Minv, img_size) 
+```
+What this code is doing is first getting the **pts** in the bird's eye view, filling a green polygon with the points, then warping the points back to the original lane. The results look like this:
+
+![alt text][warped_back1]
 
 ---
 
@@ -157,7 +173,12 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./test_videous_output/project_video.mp4)
+
+
+Or a Gif Here
+
+![alt text][project_video]
 
 ---
 
