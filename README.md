@@ -186,4 +186,4 @@ Or a Gif Here
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+My pipeline works pretty work for the standard project video, but fails for the **challenge_video** and the **harder_challenge_video**, which you can check the results out in test_videos_output. For example, in the harder_challenge_video, there are signfiicant lighting changes as the result of the shadows. My current pipeline does not deal with this color change very well, so I would need to look into tuning the color/gradient/direction threshold to better detect the lanes. I would look into different color spaces, or manully tuning parameters so that lanes are detected to be invariant of lighting conditions. I believe currently, my pipeline does not detect the difference between a shadow on a white line vs the black road.
